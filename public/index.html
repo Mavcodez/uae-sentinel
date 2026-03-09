@@ -64,7 +64,8 @@
     };
 
     socket.on('alerts_update', (data) => {
-        document.getElementById('last-scan').innerText = `LAST UPDATE: ${data.lastScan}`;
+        const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        document.getElementById('last-scan').innerText = `LAST UPDATE: ${now}`;
         const featured = document.getElementById('featured-area');
         const sidebar = document.getElementById('sidebar-area');
         featured.innerHTML = ''; sidebar.innerHTML = '';
