@@ -41,13 +41,17 @@ async function fetchOfficialAlerts() {
             else if (title.includes('meeting') || title.includes('president') || title.includes('visit') || title.includes('discuss')) category = 'diplomacy';
             else if (title.includes('rain') || title.includes('weather') || title.includes('flood')) category = 'weather';
 
+            // FIND THIS SECTION AND REPLACE IT
             return {
                 title: item.title,
                 link: item.link,
                 pubDate: item.pubDate,
                 source: item.source || 'UAE Source',
                 threatLevel: threatLevel,
-                category: category
+                category: category,
+                image: item.enclosure?.url || 
+                       item['media:content']?.$.url || 
+                       'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80'
             };
         });
 
