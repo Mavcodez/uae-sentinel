@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAE Sentinel - Official News Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #fdfdfd; --ink: #111; --red: #d9534f; --gold: #c39b56; --border: #ddd; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--ink); margin: 0; padding: 0; }
+        
+        .masthead { background: white; padding: 30px; text-align: center; border-bottom: 1px solid #000; }
+        .masthead h1 { font-family: 'UnifrakturMaguntia', serif; margin: 0; font-size: 5rem; }
+        .sub-bar { border-top: 1px solid #000; border-bottom: 4px double #000; padding: 10px 0; margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 900; text-transform: uppercase; }
+
+        .ticker { background: #111; color: #56d364; padding: 8px 30px; font-size: 0.7rem; font-weight: 800; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1000; }
+
+        .container { max-width: 1400px; margin: 40px auto; padding: 0 30px; }
+        .news-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+        @media (max-width: 900px) { .news-layout { grid-template-columns: 1fr; } }
+
+        .main-story { border-bottom: 1px solid var(--border); padding-bottom: 30px; margin-bottom: 30px; }
+        .main-story img { width: 100%; height: 450px; object-fit: cover; border-radius: 4px; }
+        .main-story h2 { font-size: 2.5rem; margin: 20px 0; font-weight: 900; line-height: 1.1; letter-spacing: -1px;}
+
+        .side-grid { display: flex; flex-direction: column; gap: 20px; border-left: 1px solid var(--border); padding-left: 20px; }
+        .mini-card { display: grid; grid-template-columns: 120px 1fr; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .mini-card img { width: 120px; height: 80px; object-fit: cover; }
+        .mini-card h4 { margin: 0; font-size: 1rem; line-height: 1.3; font-weight: 700; }
+
+        .badge { padding: 4px 8px; font-size: 0.6rem; font-weight: 900; color: white; display: inline-block; margin-bottom: 10px; text-transform: uppercase;}
+        .directive { background: var(--red); } .news { background: #004a99; } .notice, .incident { background: var(--gold); }
+        .meta { font-size: 0.7rem; color: #777; margin-top: 5px; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="masthead">
+    <h1>Uae Sentinel</h1>
+    <div class="sub-bar"><span>Est. 2026</span><span>Verified Intelligence Portal</span><span>United Arab Emirates</span></div>
+</div>
+
+<div class="ticker">
+    <div>● LIVE SATELLITE RADAR ACTIVE</div>
+    <div id="last-scan">SCANNING...</div>
+</div>
+
+<div class="container">
+    <div class="news-layout">
+        <div id="featured-area"></div>
+        <div class="side-grid" id="sidebar-area"></div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    const images = {
+        defense: 'https://images.unsplash.com/photo-1551131618-3f0a5ef5918b?auto=format&fit=crop&w=800&q=80',
+        security: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80',
+        diplomacy: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=800&q=80',
+        weather: 'https://images.unsplash.com/photo-1516912481808-34061f8bc6a2?auto=format&fit=crop&w=800&q=80',
+        general: 'https://images.unsplash.com/photo-1588694403135-24e526a45453?auto=format&fit=crop&w=800&q=80'
+    };
+
+    socket.on('alerts_update', (data) => {
+        document.getElementById('last-scan').innerText = `LAST UPDATE: ${data.lastScan}`;
+        const featured = document.getElementById('featured-area');
+        const sidebar = document.getElementById('sidebar-area');
+        featured.innerHTML = ''; sidebar.innerHTML = '';
+
+        data.alerts.forEach((item, index) => {
+            const date = new Date(item.pubDate).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            const img = images[item.category] || images.general;
+            const content = `
+                <div class="badge ${item.threatLevel}">${item.threatLevel.toUpperCase()}</div>
+                <h3><a href="${item.link}" target="_blank" style="color:inherit; text-decoration:none;">${item.title}</a></h3>
+                <div class="meta">${item.source} • ${date}</div>
+            `;
+
+            if (index === 0) {
+                featured.innerHTML = `<div class="main-story"><img src="${img}">${content.replace('h3', 'h2')}</div>`;
+            } else {
+                sidebar.innerHTML += `<div class="mini-card"><img src="${img}"><div>${content.replace('h3', 'h4')}</div></div>`;
+            }
+        });
+    });
+</script>
+</body>
+</html>
