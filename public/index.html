@@ -3,95 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UAE Sentinel - Official News Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <title>UAE Sentinel - Intelligence Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playfair+Display:wght@600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #fdfdfd; --ink: #111; --red: #d9534f; --gold: #c39b56; --border: #ddd; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--ink); margin: 0; padding: 0; }
+        :root {
+            --bg: #0d0d0d;
+            --surface: #171717;
+            --border: #262626;
+            --text: #f5f5f5;
+            --text-muted: #a3a3a3;
+            --incident: #ef4444; 
+            --news: #3b82f6; 
+            --notice: #f59e0b; 
+            --directive: #8b5cf6; 
+        }
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Roboto', sans-serif;
+        }
         
-        .masthead { background: white; padding: 30px; text-align: center; border-bottom: 1px solid #000; }
-        .masthead h1 { font-family: 'UnifrakturMaguntia', serif; margin: 0; font-size: 5rem; }
-        .sub-bar { border-top: 1px solid #000; border-bottom: 4px double #000; padding: 10px 0; margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 900; text-transform: uppercase; }
+        /* The Main Header */
+        .main-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 25px 20px 15px 20px;
+            background-color: #0a0a0a;
+        }
+        /* UPGRADED: Tactical Falcon Logo */
+        .logo-shield {
+            width: 75px;
+            height: 75px;
+            content: url('https://cdn-icons-png.flaticon.com/512/2092/2092663.png');
+            filter: invert(1) drop-shadow(0 0 10px rgba(59, 130, 246, 0.8));
+        }
+        .main-header h1 {
+            font-family: 'UnifrakturMaguntia', cursive; 
+            font-size: 4.5rem;
+            margin: 0;
+            font-weight: normal;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
 
-        .ticker { background: #111; color: #56d364; padding: 8px 30px; font-size: 0.7rem; font-weight: 800; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1000; }
+        /* Sub-Header Banner */
+        .sub-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 40px;
+            background-color: #0a0a0a;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #d4d4d8;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
 
-        .container { max-width: 1400px; margin: 40px auto; padding: 0 30px; }
-        .news-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
-        @media (max-width: 900px) { .news-layout { grid-template-columns: 1fr; } }
+        /* Live Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 40px;
+            background-color: #111;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #22c55e;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+        }
 
-        .main-story { border-bottom: 1px solid var(--border); padding-bottom: 30px; margin-bottom: 30px; }
-        .main-story img { width: 100%; height: 450px; object-fit: cover; border-radius: 4px; }
-        .main-story h2 { font-size: 2.5rem; margin: 20px 0; font-weight: 900; line-height: 1.1; letter-spacing: -1px;}
+        /* Dashboard Grid Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 2.8fr 1fr; 
+            gap: 25px;
+            padding: 30px 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
 
-        .side-grid { display: flex; flex-direction: column; gap: 20px; border-left: 1px solid var(--border); padding-left: 20px; }
-        .mini-card { display: grid; grid-template-columns: 120px 1fr; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-        .mini-card img { width: 120px; height: 80px; object-fit: cover; }
-        .mini-card h4 { margin: 0; font-size: 1rem; line-height: 1.3; font-weight: 700; }
+        /* News Area */
+        .news-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px;
+            align-content: start;
+        }
 
-        .badge { padding: 4px 8px; font-size: 0.6rem; font-weight: 900; color: white; display: inline-block; margin-bottom: 10px; text-transform: uppercase;}
-        .directive { background: var(--red); } .news { background: #004a99; } .notice, .incident { background: var(--gold); }
-        .meta { font-size: 0.7rem; color: #777; margin-top: 5px; font-weight: 700; }
+        /* Card Styling */
+        .card {
+            background: var(--surface);
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .card:hover {
+            border-color: #52525b;
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* THE HERO CARD */
+        .card.hero {
+            grid-column: 1 / -1; 
+        }
+        .card.hero img {
+            height: 400px; 
+        }
+        .card.hero .card-title {
+            font-size: 2rem; 
+        }
+        
+        /* Badges & Text */
+        .badge {
+            align-self: flex-start;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 3px;
+            margin-bottom: 12px;
+            color: #fff;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .badge.incident { background-color: var(--incident); }
+        .badge.news { background-color: var(--news); }
+        .badge.notice { background-color: var(--notice); }
+        .badge.directive { background-color: var(--directive); }
+
+        .card-title {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0 0 15px 0;
+            line-height: 1.3;
+        }
+        .card-title a { color: var(--text); text-decoration: none; }
+        .card-title a:hover { color: #60a5fa; }
+        .card-meta {
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Sidebar Widgets */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .widget {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+        }
+        .widget h2 {
+            margin: 0 0 15px 0;
+            font-size: 1rem;
+            color: #d4d4d8;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mini-feed-item {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #262626;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+        .mini-feed-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .mini-feed-item a { color: #a3a3a3; text-decoration: none; }
+        .mini-feed-item a:hover { color: #fff; }
+
+        @media (max-width: 1024px) {
+            .dashboard { grid-template-columns: 1fr; padding: 15px; }
+            .news-grid { grid-template-columns: 1fr; }
+            .card.hero { grid-column: 1; }
+            .sub-header { flex-direction: column; text-align: center; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="masthead">
-    <h1>Uae Sentinel</h1>
-    <div class="sub-bar"><span>Est. 2026</span><span>Verified Intelligence Portal</span><span>United Arab Emirates</span></div>
-</div>
-
-<div class="ticker">
-    <div>● LIVE SATELLITE RADAR ACTIVE</div>
-    <div id="last-scan">SCANNING...</div>
-</div>
-
-<div class="container">
-    <div class="news-layout">
-        <div id="featured-area"></div>
-        <div class="side-grid" id="sidebar-area"></div>
+    <div class="main-header">
+        <div class="logo-shield"></div>
+        <h1>Uae Sentinel</h1>
     </div>
-</div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script>
-    const socket = io();
+    <div class="sub-header">
+        <span>EST. 2026</span>
+        <span>VERIFIED INTELLIGENCE PORTAL</span>
+        <span>UNITED ARAB EMIRATES</span>
+    </div>
 
-    socket.on('alerts_update', (data) => {
-        // Real-time clock update
-        const now = new Date().toLocaleTimeString();
-        document.getElementById('last-scan').innerText = `LAST UPDATE: ${now}`;
+    <div class="status-bar">
+        <span>● LIVE ENCRYPTED FEED ACTIVE</span>
+        <span id="last-scan" style="color: #60a5fa;">LAST UPDATE: SYNCING...</span>
+    </div>
 
-        const featured = document.getElementById('featured-area');
-        const sidebar = document.getElementById('sidebar-area');
-        featured.innerHTML = ''; 
-        sidebar.innerHTML = '';
+    <div class="dashboard">
+        <div class="news-grid" id="news-area"></div>
 
-        data.alerts.forEach((item, index) => {
-            const date = new Date(item.pubDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        <div class="sidebar">
+
+            <div class="widget">
+                <h2>🛰️ LIVE METEOROLOGICAL RADAR</h2>
+                <iframe width="100%" height="280" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=km/h&zoom=6&overlay=radar&product=radar&level=surface&lat=25.358&lon=55.391&detailLat=25.358&detailLon=55.391&marker=true&dark=true" frameborder="0" style="border-radius: 6px; border: 1px solid #262626;"></iframe>
+            </div>
             
-            // Safety Net: If image fails, use a high-quality UAE backup
-            const fallbackImg = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80';
-            const displayImg = item.image || fallbackImg;
+            <div class="widget">
+                <h2>⚡ FAST INTEL ALERTS</h2>
+                <div id="mini-feed">Loading recent transmissions...</div>
+            </div>
 
-            const content = `
-                <div class="badge ${item.threatLevel}">${item.threatLevel.toUpperCase()}</div>
-                <h3><a href="${item.link}" target="_blank" style="color:inherit; text-decoration:none;">${item.title}</a></h3>
-                <div class="meta">${item.source} • ${date}</div>
-            `;
+            <div class="widget">
+                <h2>🌐 OFFICIAL COMM (X)</h2>
+                <a class="twitter-timeline" data-height="400" data-theme="dark" href="https://twitter.com/NCEMAUAE?ref_src=twsrc%5Etfw">Tweets by NCEMAUAE</a> 
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+            
+        </div>
+    </div>
 
-            if (index === 0) {
-                featured.innerHTML = `
-                    <div class="main-story">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const newsArea = document.getElementById('news-area');
+        const miniFeed = document.getElementById('mini-feed');
+
+        socket.on('alerts_update', (data) => {
+            document.getElementById('last-scan').innerText = `LAST UPDATE: ${new Date().toLocaleTimeString().toUpperCase()}`;
+            newsArea.innerHTML = ''; 
+            miniFeed.innerHTML = '';
+
+            data.alerts.forEach((item, index) => {
+                const date = new Date(item.pubDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const displayImg = item.image;
+                const fallbackImg = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80';
+
+                const isHero = index === 0 ? 'hero' : '';
+
+                const card = `
+                    <div class="card ${isHero}">
                         <img src="${displayImg}" onerror="this.src='${fallbackImg}'">
-                        ${content.replace('h3', 'h2')}
-                    </div>`;
-            } else {
-                sidebar.innerHTML += `
-                    <div class="mini-card">
-                        <img src="${displayImg}" onerror="this.src='${fallbackImg}'">
-                        <div>${content.replace('h3', 'h4')}</div>
-                    </div>`;
-            }
+                        <div class="card-body">
+                            <div class="badge ${item.threatLevel}">${item.threatLevel}</div>
+                            <h3 class="card-title"><a href="${item.link}" target="_blank">${item.title}</a></h3>
+                            <div class="card-meta">${item.source} &nbsp;|&nbsp; ${date}</div>
+                        </div>
+                    </div>
+                `;
+                newsArea.innerHTML += card;
+
+                if(index < 5) {
+                    miniFeed.innerHTML += `
+                        <div class="mini-feed-item">
+                            <strong style="color: #ef4444;">[${item.threatLevel.toUpperCase()}]</strong> 
+                            <a href="${item.link}" target="_blank">${item.title}</a>
+                        </div>
+                    `;
+                }
+            });
         });
-    });
-</script>
+    </script>
+</body>
+</html>
